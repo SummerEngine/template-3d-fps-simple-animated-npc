@@ -1,0 +1,528 @@
+[gd_scene format=3 uid="uid://y5b2dfpcuwko"]
+
+[ext_resource type="Script" uid="uid://pexb100avgcm" path="res://scripts/player_controller.gd" id="1_player"]
+[ext_resource type="Script" uid="uid://ckvclqajb4nlr" path="res://scripts/camera_shake_3d.gd" id="2_shake"]
+[ext_resource type="Script" uid="uid://co5liks2suh71" path="res://scripts/weapon_system.gd" id="3_weapon_sys"]
+[ext_resource type="Script" uid="uid://dss2y3pbivv51" path="res://scripts/weapon_loadout.gd" id="4_loadout"]
+[ext_resource type="Script" uid="uid://c3bje4t0j5guw" path="res://scripts/enemy_npc.gd" id="5_enemy"]
+[ext_resource type="Script" uid="uid://dcxkppgbd0nr6" path="res://scripts/hit_flash_3d.gd" id="6_hitflash"]
+[ext_resource type="Script" uid="uid://o5xit71cwfup" path="res://scripts/enemy_ranged_weapon.gd" id="7_enemy_weapon"]
+[ext_resource type="Script" uid="uid://b8d6xkjehwqi5" path="res://scripts/hud_controller.gd" id="8_hud"]
+[ext_resource type="Script" uid="uid://ce6sflnahtuva" path="res://scripts/fps_input_reader.gd" id="9_input"]
+[ext_resource type="Texture2D" uid="uid://8esj6r353khj" path="res://assets/fps_combat/vfx/weapon_fx/MuzzleFlash.png" id="12_muzzle"]
+[ext_resource type="AudioStream" uid="uid://blrifo6lm8osx" path="res://assets/fps_combat/audio/rifle_shooting_segments.wav" id="13_rifle_audio"]
+[ext_resource type="Resource" uid="uid://ce8qaev4mh3iw" path="res://weapons/rifle_01_profile.tres" id="14_rifle_profile"]
+[ext_resource type="Resource" uid="uid://cjk8qps146w3d" path="res://weapons/pistol_01_profile.tres" id="15_pistol_profile"]
+[ext_resource type="PackedScene" uid="uid://b64gq0y472ixq" path="res://assets/fps_combat/enemy/soldier_npc/NPC_soldier.fbx" id="16_soldier"]
+[ext_resource type="PackedScene" uid="uid://clvmhanbnt6sm" path="res://assets/fps_combat/weapons/first_person/rifle_01/Rifle_01.fbx" id="18_rifle"]
+
+[sub_resource type="BoxShape3D" id="GroundBox"]
+size = Vector3(60, 0.2, 60)
+
+[sub_resource type="StandardMaterial3D" id="MatGround"]
+albedo_color = Color(0.15, 0.15, 0.17, 1)
+roughness = 0.9
+
+[sub_resource type="PlaneMesh" id="PlaneMesh"]
+size = Vector2(10, 10)
+
+[sub_resource type="CapsuleShape3D" id="StandingCapsule"]
+radius = 0.35
+height = 1.8
+
+[sub_resource type="CapsuleShape3D" id="CrouchCapsule"]
+radius = 0.35
+height = 1.0
+
+[sub_resource type="CapsuleShape3D" id="EnemyCapsule"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="StyleBoxFlat" id="GameOverPanelStyle"]
+content_margin_left = 36.0
+content_margin_top = 30.0
+content_margin_right = 36.0
+content_margin_bottom = 30.0
+bg_color = Color(0.07, 0.08, 0.1, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.92, 0.97, 1, 0.55)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="World" type="Node3D" unique_id=1996471983]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1594219724]
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=1023637388]
+transform = Transform3D(0.866025, -0.353553, 0.353553, 0, 0.707107, 0.707107, -0.5, -0.612372, 0.612372, 0, 0, 0)
+light_energy = 1.2
+shadow_enabled = true
+
+[node name="Level" type="Node3D" parent="." unique_id=1248923119]
+
+[node name="Ground" type="StaticBody3D" parent="Level" unique_id=1265516338]
+collision_layer = 2
+
+[node name="GroundCollision" type="CollisionShape3D" parent="Level/Ground" unique_id=1767526110]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+shape = SubResource("GroundBox")
+
+[node name="GroundMesh" type="MeshInstance3D" parent="Level/Ground" unique_id=1791949832]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 0.00012207031, 0.0014648438, 0.0018920898)
+material_override = SubResource("MatGround")
+mesh = SubResource("PlaneMesh")
+
+[node name="Player" type="CharacterBody3D" parent="." unique_id=1806868407 groups=["player"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+collision_mask = 2
+script = ExtResource("1_player")
+
+[node name="InputReader" type="Node" parent="Player" unique_id=649264899]
+script = ExtResource("9_input")
+
+[node name="StandingShape" type="CollisionShape3D" parent="Player" unique_id=376530171]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("StandingCapsule")
+
+[node name="CrouchingShape" type="CollisionShape3D" parent="Player" unique_id=387235870]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("CrouchCapsule")
+disabled = true
+
+[node name="Head" type="Node3D" parent="Player" unique_id=1577651692]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Player/Head" unique_id=2112976441]
+fov = 70.0
+
+[node name="WeaponHolder" type="Node3D" parent="Player/Head/Camera3D" unique_id=271115082]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, -0.35, -0.65)
+
+[node name="RifleViewmodel" type="Node3D" parent="Player/Head/Camera3D/WeaponHolder" unique_id=-295970640]
+
+[node name="RifleVisual" parent="Player/Head/Camera3D/WeaponHolder/RifleViewmodel" unique_id=1302712680 instance=ExtResource("18_rifle")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
+
+[node name="Muzzle" type="Node3D" parent="Player/Head/Camera3D/WeaponHolder/RifleViewmodel" unique_id=-1034114130]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, -0.05, -0.85)
+
+[node name="MuzzleFlash" type="Sprite3D" parent="Player/Head/Camera3D/WeaponHolder/RifleViewmodel" unique_id=1296493843]
+visible = false
+modulate = Color(1, 0.8, 0.3, 1)
+texture = ExtResource("12_muzzle")
+
+[node name="ShootRay" type="RayCast3D" parent="Player/Head/Camera3D" unique_id=126134679]
+target_position = Vector3(0, 0, -100)
+collision_mask = 10
+
+[node name="CameraShake" type="Node3D" parent="Player/Head/Camera3D" unique_id=1904928678]
+script = ExtResource("2_shake")
+
+[node name="CeilingCheck" type="RayCast3D" parent="Player" unique_id=2062580994]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+target_position = Vector3(0, 1, 0)
+collision_mask = 2
+
+[node name="WeaponSystem" type="Node3D" parent="Player" unique_id=1187161865]
+script = ExtResource("3_weapon_sys")
+camera_path = NodePath("../Head/Camera3D")
+camera_shake_path = NodePath("../Head/Camera3D/CameraShake")
+
+[node name="Muzzle" type="Node3D" parent="Player/WeaponSystem" unique_id=1694042502]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, -0.05, -0.8)
+
+[node name="MuzzleFlash" type="Sprite3D" parent="Player/WeaponSystem/Muzzle" unique_id=679917677]
+visible = false
+modulate = Color(1, 0.8, 0.3, 1)
+texture = ExtResource("12_muzzle")
+
+[node name="WeaponLoadout" type="Node3D" parent="Player" unique_id=721944633]
+script = ExtResource("4_loadout")
+weapon_profiles = [ExtResource("14_rifle_profile"), ExtResource("15_pistol_profile")]
+weapon_system_path = NodePath("../WeaponSystem")
+
+[node name="Enemies" type="Node3D" parent="." unique_id=1642970220]
+
+[node name="SoldierEnemy" type="CharacterBody3D" parent="Enemies" unique_id=2062368392 groups=["enemies"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 10)
+collision_layer = 8
+collision_mask = 2
+script = ExtResource("5_enemy")
+animation_player_path = NodePath("SoldierModel/AnimationPlayer")
+
+[node name="SoldierModel" parent="Enemies/SoldierEnemy" unique_id=1200789514 instance=ExtResource("16_soldier")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Enemies/SoldierEnemy" unique_id=693884953]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("EnemyCapsule")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Enemies/SoldierEnemy" unique_id=1300229627]
+
+[node name="HitFlash" type="Node3D" parent="Enemies/SoldierEnemy" unique_id=1706520782]
+script = ExtResource("6_hitflash")
+
+[node name="EnemyWeapon" type="Node3D" parent="Enemies/SoldierEnemy" unique_id=1742765024]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 1.25, -0.45)
+script = ExtResource("7_enemy_weapon")
+fire_sound = ExtResource("13_rifle_audio")
+fire_sound_segments = Array[Vector2]([Vector2(0, 0.222), Vector2(0.222, 0.44), Vector2(0.44, 0.725), Vector2(0.725, 0.98), Vector2(0.98, 1.441), Vector2(1.441, 1.65), Vector2(1.65, 2.057), Vector2(2.057, 2.79)])
+
+[node name="Muzzle" type="Node3D" parent="Enemies/SoldierEnemy/EnemyWeapon" unique_id=683110423]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, 0.03, -0.85)
+
+[node name="MuzzleFlash" type="Sprite3D" parent="Enemies/SoldierEnemy/EnemyWeapon/Muzzle" unique_id=759470185]
+visible = false
+modulate = Color(1, 0.8, 0.3, 1)
+texture = ExtResource("12_muzzle")
+
+[node name="RightHandWeaponAttachment" type="BoneAttachment3D" parent="Enemies/SoldierEnemy" unique_id=1707711416]
+transform = Transform3D(-0.017578788, -0.9955713, 0.09235122, 0.13795969, -0.093897045, -0.9859768, 0.9902817, -0.004591518, 0.13899933, -0.7282305, 1.4085704, -0.05792141)
+bone_name = "mixamorig_RightHand"
+bone_idx = 34
+use_external_skeleton = true
+external_skeleton = NodePath("../SoldierModel/Skeleton3D")
+
+[node name="EnemyRifleVisual" parent="Enemies/SoldierEnemy/RightHandWeaponAttachment" unique_id=613854691 instance=ExtResource("18_rifle")]
+transform = Transform3D(0, 0.8, 0, 0.8, 0, 0, 0, 0, -0.8, -0.03, 0.02, 0)
+
+[node name="SoldierEnemy_02" type="CharacterBody3D" parent="Enemies" unique_id=844656755 groups=["enemies"]]
+transform = Transform3D(0.640184, 0, 0.768221, 0, 1, 0, -0.768221, 0, 0.640184, -12, 0, 10)
+collision_layer = 8
+collision_mask = 2
+script = ExtResource("5_enemy")
+animation_player_path = NodePath("SoldierModel/AnimationPlayer")
+
+[node name="SoldierModel" parent="Enemies/SoldierEnemy_02" unique_id=1195661871 instance=ExtResource("16_soldier")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Enemies/SoldierEnemy_02" unique_id=202965509]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("EnemyCapsule")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Enemies/SoldierEnemy_02" unique_id=304311897]
+
+[node name="HitFlash" type="Node3D" parent="Enemies/SoldierEnemy_02" unique_id=788505574]
+script = ExtResource("6_hitflash")
+
+[node name="EnemyWeapon" type="Node3D" parent="Enemies/SoldierEnemy_02" unique_id=488096761]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 1.25, -0.45)
+script = ExtResource("7_enemy_weapon")
+fire_sound = ExtResource("13_rifle_audio")
+fire_sound_segments = Array[Vector2]([Vector2(0, 0.222), Vector2(0.222, 0.44), Vector2(0.44, 0.725), Vector2(0.725, 0.98), Vector2(0.98, 1.441), Vector2(1.441, 1.65), Vector2(1.65, 2.057), Vector2(2.057, 2.79)])
+
+[node name="Muzzle" type="Node3D" parent="Enemies/SoldierEnemy_02/EnemyWeapon" unique_id=478377469]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, 0.03, -0.85)
+
+[node name="MuzzleFlash" type="Sprite3D" parent="Enemies/SoldierEnemy_02/EnemyWeapon/Muzzle" unique_id=822666833]
+visible = false
+modulate = Color(1, 0.8, 0.3, 1)
+texture = ExtResource("12_muzzle")
+
+[node name="RightHandWeaponAttachment" type="BoneAttachment3D" parent="Enemies/SoldierEnemy_02" unique_id=1476726320]
+transform = Transform3D(-0.01757878, -0.99557126, 0.09235123, 0.13795969, -0.093897045, -0.9859768, 0.99028176, -0.0045915246, 0.13899933, -0.7282305, 1.4085704, -0.057922363)
+bone_name = "mixamorig_RightHand"
+bone_idx = 34
+use_external_skeleton = true
+external_skeleton = NodePath("../SoldierModel/Skeleton3D")
+
+[node name="EnemyRifleVisual" parent="Enemies/SoldierEnemy_02/RightHandWeaponAttachment" unique_id=119697077 instance=ExtResource("18_rifle")]
+transform = Transform3D(0, 0.8, 0, 0.8, 0, 0, 0, 0, -0.8, -0.03, 0.02, 0)
+
+[node name="SoldierEnemy_03" type="CharacterBody3D" parent="Enemies" unique_id=1373949925 groups=["enemies"]]
+transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 12, 0, -12)
+collision_layer = 8
+collision_mask = 2
+script = ExtResource("5_enemy")
+animation_player_path = NodePath("SoldierModel/AnimationPlayer")
+
+[node name="SoldierModel" parent="Enemies/SoldierEnemy_03" unique_id=517091727 instance=ExtResource("16_soldier")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Enemies/SoldierEnemy_03" unique_id=51789218]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("EnemyCapsule")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Enemies/SoldierEnemy_03" unique_id=753488455]
+
+[node name="HitFlash" type="Node3D" parent="Enemies/SoldierEnemy_03" unique_id=2026034930]
+script = ExtResource("6_hitflash")
+
+[node name="EnemyWeapon" type="Node3D" parent="Enemies/SoldierEnemy_03" unique_id=1689103600]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 1.25, -0.45)
+script = ExtResource("7_enemy_weapon")
+fire_sound = ExtResource("13_rifle_audio")
+fire_sound_segments = Array[Vector2]([Vector2(0, 0.222), Vector2(0.222, 0.44), Vector2(0.44, 0.725), Vector2(0.725, 0.98), Vector2(0.98, 1.441), Vector2(1.441, 1.65), Vector2(1.65, 2.057), Vector2(2.057, 2.79)])
+
+[node name="Muzzle" type="Node3D" parent="Enemies/SoldierEnemy_03/EnemyWeapon" unique_id=635924281]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, 0.03, -0.85)
+
+[node name="MuzzleFlash" type="Sprite3D" parent="Enemies/SoldierEnemy_03/EnemyWeapon/Muzzle" unique_id=54185193]
+visible = false
+modulate = Color(1, 0.8, 0.3, 1)
+texture = ExtResource("12_muzzle")
+
+[node name="RightHandWeaponAttachment" type="BoneAttachment3D" parent="Enemies/SoldierEnemy_03" unique_id=1883139037]
+transform = Transform3D(-0.01757878, -0.9955714, 0.09235123, 0.13795969, -0.093897045, -0.9859768, 0.99028176, -0.004591495, 0.13899934, -0.7282295, 1.4085704, -0.05792141)
+bone_name = "mixamorig_RightHand"
+bone_idx = 34
+use_external_skeleton = true
+external_skeleton = NodePath("../SoldierModel/Skeleton3D")
+
+[node name="EnemyRifleVisual" parent="Enemies/SoldierEnemy_03/RightHandWeaponAttachment" unique_id=340871461 instance=ExtResource("18_rifle")]
+transform = Transform3D(0, 0.8, 0, 0.8, 0, 0, 0, 0, -0.8, -0.03, 0.02, 0)
+
+[node name="SoldierEnemy_04" type="CharacterBody3D" parent="Enemies" unique_id=1892426346 groups=["enemies"]]
+transform = Transform3D(-0.496139, 0, 0.868243, 0, 1, 0, -0.868243, 0, -0.496139, -14, 0, -8)
+collision_layer = 8
+collision_mask = 2
+script = ExtResource("5_enemy")
+animation_player_path = NodePath("SoldierModel/AnimationPlayer")
+
+[node name="SoldierModel" parent="Enemies/SoldierEnemy_04" unique_id=1699218539 instance=ExtResource("16_soldier")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Enemies/SoldierEnemy_04" unique_id=1916986997]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("EnemyCapsule")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Enemies/SoldierEnemy_04" unique_id=1378751006]
+
+[node name="HitFlash" type="Node3D" parent="Enemies/SoldierEnemy_04" unique_id=1596479055]
+script = ExtResource("6_hitflash")
+
+[node name="EnemyWeapon" type="Node3D" parent="Enemies/SoldierEnemy_04" unique_id=381760147]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 1.25, -0.45)
+script = ExtResource("7_enemy_weapon")
+fire_sound = ExtResource("13_rifle_audio")
+fire_sound_segments = Array[Vector2]([Vector2(0, 0.222), Vector2(0.222, 0.44), Vector2(0.44, 0.725), Vector2(0.725, 0.98), Vector2(0.98, 1.441), Vector2(1.441, 1.65), Vector2(1.65, 2.057), Vector2(2.057, 2.79)])
+
+[node name="Muzzle" type="Node3D" parent="Enemies/SoldierEnemy_04/EnemyWeapon" unique_id=630269312]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, 0.03, -0.85)
+
+[node name="MuzzleFlash" type="Sprite3D" parent="Enemies/SoldierEnemy_04/EnemyWeapon/Muzzle" unique_id=1979593400]
+visible = false
+modulate = Color(1, 0.8, 0.3, 1)
+texture = ExtResource("12_muzzle")
+
+[node name="RightHandWeaponAttachment" type="BoneAttachment3D" parent="Enemies/SoldierEnemy_04" unique_id=508209178]
+transform = Transform3D(-0.01757878, -0.9955713, 0.09235123, 0.13795969, -0.093897045, -0.9859768, 0.9902817, -0.0045915544, 0.13899931, -0.72823143, 1.4085704, -0.057922363)
+bone_name = "mixamorig_RightHand"
+bone_idx = 34
+use_external_skeleton = true
+external_skeleton = NodePath("../SoldierModel/Skeleton3D")
+
+[node name="EnemyRifleVisual" parent="Enemies/SoldierEnemy_04/RightHandWeaponAttachment" unique_id=1564871968 instance=ExtResource("18_rifle")]
+transform = Transform3D(0, 0.8, 0, 0.8, 0, 0, 0, 0, -0.8, -0.03, 0.02, 0)
+
+[node name="Effects" type="Node3D" parent="." unique_id=559645041]
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=1125016170]
+script = ExtResource("8_hud")
+
+[node name="Root" type="Control" parent="HUD" unique_id=1594805344]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="HealthPanel" type="HBoxContainer" parent="HUD/Root" unique_id=1559209527]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 0.34
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -78.0
+offset_bottom = -24.0
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="HealthLabel" type="Label" parent="HUD/Root/HealthPanel" unique_id=481449605]
+custom_minimum_size = Vector2(96, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.97, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.75)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 26
+text = "HP 100"
+vertical_alignment = 1
+
+[node name="HealthBar" type="ProgressBar" parent="HUD/Root/HealthPanel" unique_id=1425378127]
+custom_minimum_size = Vector2(240, 34)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 2
+value = 100.0
+show_percentage = false
+
+[node name="KillsPanel" type="VBoxContainer" parent="HUD/Root" unique_id=842560572]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.43
+anchor_right = 0.57
+offset_top = 18.0
+offset_bottom = 82.0
+mouse_filter = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="KillsTitle" type="Label" parent="HUD/Root/KillsPanel" unique_id=320424962]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.97, 1, 0.82)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.7)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 16
+text = "KILLS"
+horizontal_alignment = 1
+
+[node name="KillsLabel" type="Label" parent="HUD/Root/KillsPanel" unique_id=1887542315]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.97, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.78)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 32
+text = "0"
+horizontal_alignment = 1
+
+[node name="Center" type="CenterContainer" parent="HUD/Root" unique_id=1023382664]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Crosshair" type="Label" parent="HUD/Root/Center" unique_id=126856115]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.97, 1, 0.9)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.65)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 24
+text = "+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AmmoPanel" type="VBoxContainer" parent="HUD/Root" unique_id=1467401774]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.87
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -100.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/separation = 2
+alignment = 2
+
+[node name="AmmoTitle" type="Label" parent="HUD/Root/AmmoPanel" unique_id=17096518]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.97, 1, 0.82)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.7)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 16
+text = "AMMO"
+horizontal_alignment = 2
+
+[node name="AmmoLabel" type="Label" parent="HUD/Root/AmmoPanel" unique_id=1008227431]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.97, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.78)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 28
+text = "30 / 120"
+horizontal_alignment = 2
+
+[node name="ReloadLabel" type="Label" parent="HUD/Root/AmmoPanel" unique_id=959535791]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.86, 0.48, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.76)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 16
+text = "Reloading..."
+horizontal_alignment = 2
+
+[node name="DamageOverlay" type="ColorRect" parent="HUD/Root" unique_id=939415078]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 0, 0, 0)
+
+[node name="GameOverOverlay" type="Control" parent="HUD/Root" unique_id=1015425272]
+process_mode = 3
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="HUD/Root/GameOverOverlay" unique_id=1239573083]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.58)
+
+[node name="GameOverMenu" type="PanelContainer" parent="HUD/Root/GameOverOverlay" unique_id=1722165776]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.2
+anchor_top = 0.34
+anchor_right = 0.8
+anchor_bottom = 0.66
+theme_override_styles/panel = SubResource("GameOverPanelStyle")
+
+[node name="Margin" type="MarginContainer" parent="HUD/Root/GameOverOverlay/GameOverMenu" unique_id=1101913971]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="HUD/Root/GameOverOverlay/GameOverMenu/Margin" unique_id=62022108]
+layout_mode = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="Title" type="Label" parent="HUD/Root/GameOverOverlay/GameOverMenu/Margin/VBox" unique_id=2086365527]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.97, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.75)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 38
+text = "GAME OVER"
+horizontal_alignment = 1
+
+[node name="RestartButton" type="Button" parent="HUD/Root/GameOverOverlay/GameOverMenu/Margin/VBox" unique_id=2102185701]
+custom_minimum_size = Vector2(220, 54)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 24
+text = "Restart"

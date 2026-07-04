@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/fps_combat/weapons/first_person/pistol_01/Pistol_01_Albedo.png" id="1"]
+
+[resource]
+albedo_texture = ExtResource("1")
+roughness = 0.55
+metallic = 0.25
+cull_mode = 0

@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="FPSWeaponProfile" format=3 uid="uid://cjk8qps146w3d"]
+
+[ext_resource type="Script" uid="uid://c045m15dgvuhm" path="res://scripts/fps_weapon_profile.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+damage = 20.0
+fire_rate = 0.25
+reload_time = 1.2
+max_ammo = 60
+spread_degrees = 1.8
+shot_range = 80.0
+weapon_model_path = "res://assets/fps_combat/weapons/first_person/pistol_01/Pistol_01.fbx"
+draw_anim = ""
+weapon_anim_base_pose_fbx = "res://assets/fps_combat/weapons/first_person/pistol_01/animations/Pistol_01_BasePose.fbx"
+weapon_anim_fire_fbx = "res://assets/fps_combat/weapons/first_person/pistol_01/animations/Pistol_01_Fire.fbx"
+weapon_anim_reload_fbx = "res://assets/fps_combat/weapons/first_person/pistol_01/animations/Pistol_01_Reload.fbx"
+fire_camera_trauma = 0.2
+hit_camera_trauma = 0.4

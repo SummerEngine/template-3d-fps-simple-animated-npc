@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="FPSWeaponProfile" format=3 uid="uid://ce8qaev4mh3iw"]
+
+[ext_resource type="Script" uid="uid://c045m15dgvuhm" path="res://scripts/fps_weapon_profile.gd" id="1"]
+[ext_resource type="AudioStream" uid="uid://blrifo6lm8osx" path="res://assets/fps_combat/audio/rifle_shooting_segments.wav" id="2"]
+
+[resource]
+script = ExtResource("1")
+weapon_name = "Rifle"
+fire_rate = 0.12
+magazine_size = 30
+is_automatic = true
+spread_degrees = 1.2
+weapon_model_path = "res://assets/fps_combat/weapons/first_person/rifle_01/Rifle_01.fbx"
+draw_anim = ""
+weapon_anim_base_pose_fbx = "res://assets/fps_combat/weapons/first_person/rifle_01/animations/Rifle_01_BasePose.fbx"
+weapon_anim_fire_fbx = "res://assets/fps_combat/weapons/first_person/rifle_01/animations/Rifle_01_Fire.fbx"
+weapon_anim_reload_fbx = "res://assets/fps_combat/weapons/first_person/rifle_01/animations/Rifle_01_Reload.fbx"
+fire_sound = ExtResource("2")
+fire_sound_segments = Array[Vector2]([Vector2(0, 0.222), Vector2(0.222, 0.44), Vector2(0.44, 0.725), Vector2(0.725, 0.98), Vector2(0.98, 1.441), Vector2(1.441, 1.65), Vector2(1.65, 2.057), Vector2(2.057, 2.79)])
