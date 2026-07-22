@@ -1,6 +1,6 @@
 {
   "id": "fps-combat-slice",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "name": "FPS Combat Slice",
   "engineMinVersion": "0.5.43",
   "entryScene": "res://main.tscn",
@@ -25,7 +25,7 @@
     "shooter",
     "action"
   ],
-  "agentBrief": "A complete first-person combat vertical slice (Godot 4.6, 3D, GDScript). ENTRY SCENE: res://main.tscn. Unlike the previously published zip of this template, this version SHIPS project.godot with the ENTIRE input map already bound: move_forward W, move_back S, move_left A, move_right D, jump Space, sprint Shift, crouch C, shoot mouse-left, aim mouse-right, reload R, interact E, weapon_1 key 1, weapon_2 key 2, plus look_left/look_right/look_up/look_down as gamepad right-stick axes — those look_* actions may stay keyboard-unbound but MUST exist because scripts reference them, so do not delete them. PLAYER: scripts/player_controller.gd (CharacterBody3D: move, sprint, crouch, jump, mouse look) with input read through scripts/fps_input_reader.gd (smoke-tested by tests/input_reader_smoke_test.gd — tests/ is dev-only, not runtime). WEAPONS: scripts/weapon_system.gd + scripts/weapon_loadout.gd driven by FpsWeaponProfile resources (scripts/fps_weapon_profile.gd) in weapons/ (rifle_01_profile.tres, pistol_01_profile.tres); first-person arms rig with per-weapon animations under assets/fps_combat/weapons/first_person/. FEEL: scripts/bullet_tracer_3d.gd, hit_flash_3d.gd, one_shot_vfx_3d.gd, camera_shake_3d.gd. ENEMIES: scripts/enemy_npc.gd — an animated soldier NPC (assets/fps_combat/enemy/soldier_npc) that patrols and fires back via scripts/enemy_ranged_weapon.gd. HUD: scripts/hud_controller.gd. Physics layers are defined in scripts/fps_combat_layers.gd. Audio buses: res://default_bus_layout.tres at Godot's default path, so it auto-applies. No .godot cache ships — the first editor scan re-imports the FBX assets (takes a minute; not a hang). Use only assets under res://assets/fps_combat/ (inventory: asset_manifest/fps_combat_assets.md). CUSTOMIZE BY: retuning @export vars on the player and weapons, adding FpsWeaponProfile resources, reskinning assets, editing main.tscn layout — do not rewrite the weapon/input system spine.",
+  "agentBrief": "A complete first-person combat vertical slice (Godot 4.6, 3D, GDScript). ENTRY SCENE: res://main.tscn. Unlike the previously published zip of this template, this version SHIPS project.godot with the ENTIRE input map already bound: move_forward W, move_back S, move_left A, move_right D, jump Space, sprint Shift, crouch C, shoot mouse-left, aim mouse-right, reload R, interact E, weapon_1 key 1, weapon_2 key 2, plus look_left/look_right/look_up/look_down as gamepad right-stick axes — those look_* actions may stay keyboard-unbound but MUST exist because scripts reference them, so do not delete them. PLAYER: scripts/player_controller.gd (CharacterBody3D: move, sprint, crouch, jump, mouse look) with input read through scripts/fps_input_reader.gd (smoke-tested by tests/input_reader_smoke_test.gd — tests/ is dev-only, not runtime). WEAPONS: scripts/weapon_system.gd + scripts/weapon_loadout.gd driven by FpsWeaponProfile resources (scripts/fps_weapon_profile.gd) in weapons/ (rifle_01_profile.tres, pistol_01_profile.tres); first-person arms rig with per-weapon animations under assets/fps_combat/weapons/first_person/. FEEL: scripts/bullet_tracer_3d.gd, hit_flash_3d.gd, one_shot_vfx_3d.gd, camera_shake_3d.gd. ENEMIES: scripts/enemy_npc.gd — an animated soldier NPC (assets/fps_combat/enemy/soldier_npc) that patrols and fires back via scripts/enemy_ranged_weapon.gd. HUD: scripts/hud_controller.gd. Physics layers are defined in scripts/fps_combat_layers.gd. Audio buses: res://default_bus_layout.tres at Godot's default path, so it auto-applies. No .godot cache ships — the first editor scan re-imports the FBX assets (takes a minute; not a hang). ENVIRONMENT: main.tscn's WorldEnvironment now carries an Environment with a PanoramaSkyMaterial day skybox (res://assets/environment/skybox/skybox_day.png) driving sky-sourced ambient light, plus a tiled grass ground material (res://assets/environment/ground/ground_grass.png); both are Kenney CC0. Swap the panorama texture to reskin the sky, swap the ground albedo or its uv1_scale to reskin the floor. Use only assets under res://assets/fps_combat/ (gameplay) and res://assets/environment/ (sky/ground) — inventory: asset_manifest/fps_combat_assets.md. CUSTOMIZE BY: retuning @export vars on the player and weapons, adding FpsWeaponProfile resources, reskinning assets, editing main.tscn layout — do not rewrite the weapon/input system spine.",
   "shipsProjectGodot": true,
   "userFacing": {
     "tagline": "A complete FPS combat slice: first-person arms, rifle and pistol gunplay, enemy soldiers.",
@@ -35,7 +35,8 @@
       "Hitscan gunplay with tracers, hit flashes, VFX and camera shake",
       "Animated enemy soldier NPCs that patrol and fire back",
       "HUD, full keyboard/mouse and gamepad bindings out of the box",
-      "Input map ships bound and ready — open the project and play"
+      "Input map ships bound and ready — open the project and play",
+      "Skybox sky and textured ground out of the box (Kenney CC0)"
     ]
   }
 }

@@ -2,7 +2,7 @@
 
 Generated: 2026-07-02
 
-Use only the assets under `res://assets/fps_combat/` for this prepared test. Ignore stale editor/import cache paths and do not search outside this project for weapons, enemies, textures, VFX, or audio.
+Use only the assets under `res://assets/fps_combat/` (gameplay content) and `res://assets/environment/` (skybox + ground, CC0) for this prepared test. Ignore stale editor/import cache paths and do not search outside this project for weapons, enemies, textures, VFX, or audio.
 
 ## Import Order Already Completed
 
@@ -55,6 +55,8 @@ Heavy 3D assets and audio were imported in separate passes.
 | Dying-2.fbx | Enemy source Basic Shooter Pack | Enemy source/Adobe terms | `res://assets/fps_combat/enemy/ranged_soldier_animations/Dying-2.fbx` | yes, fallback |
 | Rifle shooting source FLAC | audio source 238916 by source author | CC0 according to audio source | `res://assets/fps_combat/audio/rifle_shooting_segments.flac` | source only |
 | Rifle shooting PCM WAV | Converted from audio source 238916 source | CC0 according to audio source | `res://assets/fps_combat/audio/rifle_shooting_segments.wav` | yes |
+| skybox_day.png (equirectangular sky panorama) | Kenney "Skyboxes" pack (kenney.nl) | CC0 | `res://assets/environment/skybox/skybox_day.png` | yes |
+| ground_grass.png (tileable ground) | Kenney "Retro Textures Fantasy" pack (kenney.nl) | CC0 | `res://assets/environment/ground/ground_grass.png` | yes |
 
 ## Runtime Audio Choice
 
