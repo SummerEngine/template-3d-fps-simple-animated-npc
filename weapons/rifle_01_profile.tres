@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="FPSWeaponProfile" format=3 uid="uid://ce8qaev4mh3iw"]
 
-[ext_resource type="Script" uid="uid://c045m15dgvuhm" path="res://scripts/fps_weapon_profile.gd" id="1"]
-[ext_resource type="AudioStream" uid="uid://blrifo6lm8osx" path="res://assets/fps_combat/audio/rifle_shooting_segments.wav" id="2"]
+[ext_resource type="Script" path="res://scripts/fps_weapon_profile.gd" id="1"]
+[ext_resource type="AudioStream" path="res://assets/fps_combat/audio/rifle_shooting_segments.wav" id="2"]
 
 [resource]
 script = ExtResource("1")
