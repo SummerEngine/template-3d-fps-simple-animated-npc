@@ -1,4 +1,4 @@
-# Simple Animated FPS NPC Template
+# FPS Combat Slice (simple animated FPS NPC template)
 
 This Summer Engine template is a compact first-person combat slice you can use as a starting point for a 3D shooter, enemy encounter prototype, or weapon handling experiment. It includes a playable arena, first-person movement, a rifle and pistol loadout, animated weapon viewmodels, ranged NPC enemies, hit feedback, muzzle effects, audio, and a simple HUD.
 

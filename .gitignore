@@ -1,6 +1,7 @@
 # Summer Engine defaults
 .godot/
-*.import
+# *.import files are import settings + uids for the shipped PNG/WAV/FBX assets; commit them
+# once an editor pass has generated them so every clone imports identically.
 *.translation
 .DS_Store
 Thumbs.db
