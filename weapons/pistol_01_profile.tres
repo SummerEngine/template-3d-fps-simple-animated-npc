@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="FPSWeaponProfile" format=3 uid="uid://cjk8qps146w3d"]
 
-[ext_resource type="Script" uid="uid://c045m15dgvuhm" path="res://scripts/fps_weapon_profile.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/fps_weapon_profile.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
